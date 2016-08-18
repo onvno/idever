@@ -51,6 +51,14 @@ program
 		require('../command/build')()
 	})
 
+program
+	.command('publish')
+	.description('各仓库在npm发包')
+	.alias('p')
+	.action(() => {
+		require('../command/publish')()
+	})
+
 program.parse(process.argv)
 
 if(!program.args.length){
