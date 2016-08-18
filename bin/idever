@@ -43,6 +43,14 @@ program
 		require('../command/delete')()
 	})
 
+program
+	.command('build')
+	.description('修改原始文件，输出最终u.js')
+	.alias('b')
+	.action(() => {
+		require('../command/build')()
+	})
+
 program.parse(process.argv)
 
 if(!program.args.length){
