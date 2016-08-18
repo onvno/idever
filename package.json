@@ -6,15 +6,26 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "bin": {
+    "idever": "bin/idever"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/onvno/idever.git"
   },
-  "keywords": [],
+  "keywords": [
+    "idever"
+  ],
   "author": "",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/onvno/idever/issues"
   },
-  "homepage": "https://github.com/onvno/idever#readme"
+  "homepage": "https://github.com/onvno/idever#readme",
+  "dependencies": {
+    "chalk": "^1.1.3",
+    "co": "^4.6.0",
+    "co-prompt": "^1.0.0",
+    "commander": "^2.9.0"
+  }
 }
