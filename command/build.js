@@ -27,13 +27,14 @@ module.exports = () => {
 	var buildFun = {
 		init: function() {
 			this.whole();
-			console.log('仓库已准备好');
+			console.log(chalk.green(`\n √ 仓库已clone更新，准备复制源码`));
 
 			for(var i=0; i<npmDir.length; i++){
 				this.copy(npmDir[i]);
 			}
-			
+			console.log(chalk.green(`\n √ 复制已完成,准备输出dist目录`));
 			this.dist();
+			console.log(chalk.green(`\n √ 完成：已输出u.js`));
 		},
 
 		iswhole: false,
@@ -59,6 +60,16 @@ module.exports = () => {
 				      console.log(chalk.green(`\n √ 已clone ${name}仓库`))
 				      process.exit()
 				    })
+				} else {
+					var cloneCMD = `cd ${name} && git checkout release && git pull origin release && cd ..`;
+					execSync(cloneCMD, (error, stdout, stderr) => {
+				      if (error) {
+				        console.log(error)
+				        process.exit()
+				      }
+				      console.log(chalk.green(`\n √ 已更新 ${name}仓库`))
+				      process.exit()
+				    })
 				}
 			});
 
@@ -75,8 +86,7 @@ module.exports = () => {
 		 */
 		copy: function(copyname){
 			var paths = fs.readdirSync(envPath);
-			var copyAry = [];
-			
+
 			var loopFun = function(paths) {
 
 				paths.forEach(function(path){
@@ -87,32 +97,32 @@ module.exports = () => {
 
 					// 判断子集nodemodules是否存在
 					if(fs.existsSync(_path)){
-						fs.stat(_path, function(err, st){
-							
-							if(st.isDirectory()){
-								// 存在
-								var subpaths = fs.readdirSync(_path);
-								subpaths.forEach(function(subpath) {
-									// console.log(subpath);
-									try {
-									  if(copyname == 'neoui-sparrow'){
-									  	fse.copySync(envPath + '/' + 'sparrow' + '/js', _path +'/'+ copyname +'/js')
-									  } else {
-									  	fse.copySync(envPath + '/' + copyname + '/js', _path +'/'+ copyname +'/js')
-									  }
-									  
-									  console.log('完成' + _path +'/'+ copyname +'/js' + "复制，success!")
-									} catch (err) {
-									  console.error(err)
-									}
-								});
-								var nextModAry = [nextMod];
-								// console.log(nextModAry)
-								loopFun(nextModAry);
-							} else {
-								// 不存在
-							}
-						});
+
+						var st = fs.statSync(_path);
+						
+						if(st.isDirectory()){
+							// 存在
+							var subpaths = fs.readdirSync(_path);
+							subpaths.forEach(function(subpath) {
+								// console.log(subpath);
+								try {
+								  if(copyname == 'neoui-sparrow'){
+								  	fse.copySync(envPath + '/' + 'sparrow' + '/js', _path +'/'+ copyname +'/js')
+								  } else {
+								  	fse.copySync(envPath + '/' + copyname + '/js', _path +'/'+ copyname +'/js')
+								  }
+								  
+								  // console.log('完成' + _path +'/'+ copyname +'/js' + "复制，success!")
+								} catch (err) {
+								  console.error(err)
+								}
+							});
+							var nextModAry = [nextMod];
+							// console.log(nextModAry)
+							loopFun(nextModAry);
+						} else {
+							// 不存在
+						}
 					}
 						
 				});
